@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <algorithm>
 
 
 int main()
@@ -33,28 +34,58 @@ int main()
 	glViewport(0, 0, 800, 600);
 
 	float vertices[] = {
-		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		// Front face
+		// Position            // Color         // UV
+		-0.5, -0.5,  0.5,       1.0, 0.0, 0.0,  0.0, 0.0,       // Bottom left
+		 0.5, -0.5,  0.5,       0.0, 1.0, 0.0,  1.0, 0.0,       // Bottom right
+		 0.5,  0.5,  0.5,       0.0, 0.0, 1.0,  1.0, 1.0,       // Top right
+		-0.5,  0.5,  0.5,       1.0, 1.0, 0.0,  0.0, 1.0,       // Top left
+
+		// Back face
+		-0.5, -0.5, -0.5,       1.0, 0.0, 0.0,  1.0, 0.0,       // Bottom left
+		 0.5, -0.5, -0.5,       0.0, 1.0, 0.0,  0.0, 0.0,       // Bottom right
+		 0.5,  0.5, -0.5,       0.0, 0.0, 1.0,  0.0, 1.0,       // Top right
+		-0.5,  0.5, -0.5,       1.0, 1.0, 0.0,  1.0, 1.0        // Top left
 	};
+
+
 
 	unsigned int indices[] = {
-		0, 1, 3, // first triangle
-		1, 2, 3  // second triangle
+		// Front face
+		0, 1, 2,
+		2, 3, 0,
+
+		// Right face
+		1, 5, 6,
+		6, 2, 1,
+
+		// Back face
+		7, 6, 5,
+		5, 4, 7,
+
+		// Left face
+		4, 0, 3,
+		3, 7, 4,
+
+		// Bottom face
+		4, 5, 1,
+		1, 0, 4,
+
+		// Top face
+		3, 2, 6,
+		6, 7, 3
 	};
 
-	{ // -> scope to delete the stack allocated objects before "glTerminate"
-		IndexBuffer IBO(indices, sizeof(indices));
-
+	{ // -> scope to delete the stack allocated objects before "glTerminate
 		unsigned int VAO;
+
+		IndexBuffer IBO(indices, sizeof(indices));
 
 		glGenVertexArrays(1, &VAO);
 		glBindVertexArray(VAO);
 
 		VertexBuffer VBO(vertices, sizeof(vertices));
-
+		
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(0 * sizeof(float)));
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
@@ -67,12 +98,40 @@ int main()
 		Texture texture("res/textures/tex.png");
 		Shader triShader("./res/shaders/frag.shader", "./res/shaders/vert.shader");
 
+		// MVP
+
+		glm::mat4 view = glm::mat4(1.0f);
+		glm::mat4 proj = glm::mat4(1.0f);
+
+		view = glm::translate(view, glm::vec3(0.f, 0.f, -3.f));
+		triShader.setMat4("view", view);
+
+		proj = glm::perspective(glm::radians(50.f), 800.f / 600.f, 0.1f, 100.f);
+		triShader.setMat4("proj", proj);
+
+		// MVP End
+
 		// Shaders End
+
+		glm::vec3 cubePositions[] = {
+			glm::vec3(0.0f,  0.0f,  0.0f),
+			glm::vec3(2.0f,  5.0f, -15.0f),
+			glm::vec3(-1.5f, -2.2f, -2.5f),
+			glm::vec3(-3.8f, -2.0f, -12.3f),
+			glm::vec3(2.4f, -0.4f, -3.5f),
+			glm::vec3(-1.7f,  3.0f, -7.5f),
+			glm::vec3(1.3f, -2.0f, -2.5f),
+			glm::vec3(1.5f,  2.0f, -2.5f),
+			glm::vec3(1.5f,  0.2f, -1.5f),
+			glm::vec3(-1.3f,  1.0f, -1.5f)
+		};
+
+		glEnable(GL_DEPTH_TEST);
 
 		while (!glfwWindowShouldClose(window))
 		{
 			glClearColor(0.05f, 0.15f, 0.15f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// Rendering
 
@@ -81,7 +140,20 @@ int main()
 
 			glBindVertexArray(VAO);
 			IBO.Bind();
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);// 2 -> no. of indicies
+			
+			for (const glm::vec3 &cubePos : cubePositions)
+			{
+				glm::mat4 model = glm::mat4(1.0f);
+				model = glm::mat4(1.f);
+				model = glm::translate(model, cubePos);
+
+				float rot = cubePos.x == 0 ? 20.f : cubePos.x * 20.f;
+
+				model = glm::rotate(model, ((float)glfwGetTime()) * glm::radians(rot), glm::vec3(1.f, .3f, .5f));
+				triShader.setMat4("model", model);
+
+				glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);// 2 -> no. of indicies
+			}
 
 			// Ends
 
