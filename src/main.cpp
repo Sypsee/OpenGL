@@ -3,11 +3,18 @@
 #include "OpenGL/VertexBuffer.h"
 #include "OpenGL/IndexBuffer.h"
 
+#include "Game/Camera.h"
+
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <algorithm>
 
+Camera cam;
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	cam.mouse_callback(window, xpos, ypos);
+}
 
 int main()
 {
@@ -47,8 +54,6 @@ int main()
 		 0.5,  0.5, -0.5,       0.0, 0.0, 1.0,  0.0, 1.0,       // Top right
 		-0.5,  0.5, -0.5,       1.0, 1.0, 0.0,  1.0, 1.0        // Top left
 	};
-
-
 
 	unsigned int indices[] = {
 		// Front face
@@ -97,21 +102,10 @@ int main()
 
 		Texture texture("res/textures/tex.png");
 		Shader triShader("./res/shaders/frag.shader", "./res/shaders/vert.shader");
-
-		// MVP
-
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 proj = glm::mat4(1.0f);
-
-		view = glm::translate(view, glm::vec3(0.f, 0.f, -3.f));
-		triShader.setMat4("view", view);
-
-		proj = glm::perspective(glm::radians(50.f), 800.f / 600.f, 0.1f, 100.f);
-		triShader.setMat4("proj", proj);
-
-		// MVP End
-
+		
 		// Shaders End
+
+		triShader.setMat4("proj", cam.getProjMatrix());
 
 		glm::vec3 cubePositions[] = {
 			glm::vec3(0.0f,  0.0f,  0.0f),
@@ -127,6 +121,7 @@ int main()
 		};
 
 		glEnable(GL_DEPTH_TEST);
+		glfwSetCursorPosCallback(window, mouse_callback);
 
 		while (!glfwWindowShouldClose(window))
 		{
@@ -140,7 +135,10 @@ int main()
 
 			glBindVertexArray(VAO);
 			IBO.Bind();
-			
+
+			cam.update(window);
+			triShader.setMat4("view", cam.getViewMatrix());
+
 			for (const glm::vec3 &cubePos : cubePositions)
 			{
 				glm::mat4 model = glm::mat4(1.0f);
@@ -148,8 +146,10 @@ int main()
 				model = glm::translate(model, cubePos);
 
 				float rot = cubePos.x == 0 ? 20.f : cubePos.x * 20.f;
+				float scale = sin(glfwGetTime()) * 1.f;
 
 				model = glm::rotate(model, ((float)glfwGetTime()) * glm::radians(rot), glm::vec3(1.f, .3f, .5f));
+				model = glm::scale(model, glm::abs(glm::vec3(scale)));
 				triShader.setMat4("model", model);
 
 				glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);// 2 -> no. of indicies
