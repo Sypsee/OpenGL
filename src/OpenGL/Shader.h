@@ -1,8 +1,6 @@
-#ifndef SHADER_H
-#endif
-#define SHADER_H
+#pragma once
 
-#include <glad/glad.h> // include glad to get all the required OpenGL headers
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
