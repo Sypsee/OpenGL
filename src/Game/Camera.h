@@ -12,6 +12,9 @@ public:
 	void update(GLFWwindow* window);
 	void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
+	void setAspectRatio(float aspect_ratio);
+
+	glm::vec3 getPosition() const;
 	glm::mat4 getProjMatrix() const;
 	glm::mat4 getViewMatrix() const;
 

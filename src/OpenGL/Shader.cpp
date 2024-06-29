@@ -76,6 +76,12 @@ void Shader::setI(const char* u_name, float v1)
     glUniform1i(GetUniformLocation(u_name), v1);
 }
 
+void Shader::setVec3(const char* u_name, glm::vec3 val)
+{
+    glUseProgram(shaderId);
+    glUniform3fv(GetUniformLocation(u_name), 1, glm::value_ptr(val));
+}
+
 void Shader::setMat4(const char* u_name, glm::mat4 val)
 {
     glUseProgram(shaderId);
