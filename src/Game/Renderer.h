@@ -8,7 +8,8 @@
 #include <unordered_map>
 #include <string>
 
-#include "Cube.h"
+#include "Camera.h"
+#include "Chunk.h"
 
 
 class Renderer
@@ -17,8 +18,8 @@ class Renderer
 public:
 	void Init();
 	void Update();
-	void Draw(GLFWwindow* window, glm::mat4 proj, glm::mat4 view);
+	void Draw(GLFWwindow* window, Camera cam);
 
 private:
-	std::unordered_map<glm::vec3, Cube> m_cubes;
+	std::unordered_map<glm::vec3, Chunk> m_chunks;
 };

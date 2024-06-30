@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application\Application.cpp" />
+    <ClCompile Include="src\Game\Chunk.cpp" />
     <ClCompile Include="src\Game\Cube.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_demo.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application\Application.h" />
+    <ClInclude Include="src\Game\Chunk.h" />
     <ClInclude Include="src\Game\Cube.h" />
     <ClInclude Include="Libraries\include\imgui\imconfig.h" />
     <ClInclude Include="Libraries\include\imgui\imgui.h" />

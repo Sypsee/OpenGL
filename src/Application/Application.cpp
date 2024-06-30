@@ -1,5 +1,6 @@
 #include "Application.h"
 #include <iostream>
+#include <windows.h>
 
 
 Camera cam;
@@ -57,8 +58,19 @@ void Application::Update()
 {
 	while (!glfwWindowShouldClose(m_Window))
 	{
+		static float framesPerSecond = 0.0f;       // This will store our fps
+		static float lastTime = 0.0f;       // This will hold the time from the last frame
+		float currentTime = GetTickCount() * 0.001f;
+		++framesPerSecond;
+		if (currentTime - lastTime > 1.0f)
+		{
+			lastTime = currentTime;
+			if (true) fprintf(stderr, "\nCurrent Frames Per Second: %d\n\n", (int)framesPerSecond);
+			framesPerSecond = 0;
+		}
+
 		cam.update(m_Window);
 		renderer.Update();
-		renderer.Draw(m_Window, cam.getProjMatrix(), cam.getViewMatrix());
+		renderer.Draw(m_Window, cam);
 	}
 }
