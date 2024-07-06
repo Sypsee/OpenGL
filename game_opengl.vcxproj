@@ -152,8 +152,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application\Application.cpp" />
-    <ClCompile Include="src\Game\Chunk.cpp" />
-    <ClCompile Include="src\Game\Cube.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_demo.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_draw.cpp" />
@@ -162,7 +160,9 @@
     <ClCompile Include="Libraries\include\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Game\Camera.cpp" />
+    <ClCompile Include="src\Game\Model.cpp" />
     <ClCompile Include="src\Game\Renderer.cpp" />
+    <ClCompile Include="src\Game\Skybox.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\OpenGL\Shader.cpp" />
@@ -172,8 +172,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application\Application.h" />
-    <ClInclude Include="src\Game\Chunk.h" />
-    <ClInclude Include="src\Game\Cube.h" />
     <ClInclude Include="Libraries\include\imgui\imconfig.h" />
     <ClInclude Include="Libraries\include\imgui\imgui.h" />
     <ClInclude Include="Libraries\include\imgui\imgui_impl_glfw.h" />
@@ -184,7 +182,9 @@
     <ClInclude Include="Libraries\include\imgui\imstb_textedit.h" />
     <ClInclude Include="Libraries\include\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Game\Camera.h" />
+    <ClInclude Include="src\Game\Model.h" />
     <ClInclude Include="src\Game\Renderer.h" />
+    <ClInclude Include="src\Game\Skybox.h" />
     <ClInclude Include="src\OpenGL\Shader.h" />
     <ClInclude Include="src\OpenGL\Texture.h" />
     <ClInclude Include="src\OpenGL\VertexBuffer.h" />

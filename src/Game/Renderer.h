@@ -9,7 +9,8 @@
 #include <string>
 
 #include "Camera.h"
-#include "Chunk.h"
+#include "Skybox.h"
+#include "Model.h"
 
 
 class Renderer
@@ -20,6 +21,9 @@ public:
 	void Update();
 	void Draw(GLFWwindow* window, Camera cam);
 
+	~Renderer();
+
 private:
-	std::unordered_map<glm::vec3, Chunk> m_chunks;
+	Skybox* skybox;
+	Model* monkey;
 };
