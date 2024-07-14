@@ -30,8 +30,7 @@ void Renderer::Draw(GLFWwindow* window, Camera cam)
 	ImGui::DragFloat3("Light Pos", glm::value_ptr(lightPos), .1f);
 
 	skybox->Draw(cam.getProjMatrix(), cam.getViewMatrix());
-	
-	light->bindFrameBuffer();
+
 	light->bindDepthTex();
 
 	for (int i = 0; i < models.size(); i++)
@@ -45,8 +44,6 @@ void Renderer::Draw(GLFWwindow* window, Camera cam)
 		models[i].lightSpaceMatrix = light->getLightSpaceMat();
 		models[i].Draw(cam.getProjMatrix(), cam.getViewMatrix(), cam.getPosition(), modelPos[i], 0, glm::vec3(1.f));
 	}
-
-	light->unBindFrameBuffer();
 
 	ImGui::End();
 	ImGui::Render();
