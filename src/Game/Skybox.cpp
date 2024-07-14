@@ -52,7 +52,7 @@ Skybox::Skybox(const char* texPath, const char* fragPath, const char* vertPath)
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f
 	};
 
-	VertexBuffer *VBO = new VertexBuffer(&vertices, sizeof(vertices));
+	VertexBuffer* VBO = new VertexBuffer(&vertices, sizeof(vertices));
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -62,7 +62,6 @@ Skybox::Skybox(const char* texPath, const char* fragPath, const char* vertPath)
 	glEnableVertexAttribArray(2);
 
 	m_Model = glm::scale(m_Model, glm::vec3(5000.f));
-
 }
 
 void Skybox::Draw(glm::mat4 proj, glm::mat4 view)
@@ -78,4 +77,9 @@ void Skybox::Draw(glm::mat4 proj, glm::mat4 view)
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
+}
+
+Texture Skybox::getCubemapTex()
+{
+	return m_Texture;
 }

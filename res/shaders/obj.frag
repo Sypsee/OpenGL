@@ -11,10 +11,10 @@ uniform vec3 lightPos;
 
 vec3 lightColor = vec3(1,1,1);
 vec3 specularReflectionColor = vec3(1,1,1);
-float lightIntensity = .6;
-float ambientIntensity = .2;
-float shininess = .1;
-float alpha = 150;
+float lightIntensity = 1;
+float ambientIntensity = .5;
+float shininess = .2;
+float alpha = 80;
 
 void main()
 {

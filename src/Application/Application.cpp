@@ -2,8 +2,12 @@
 #include <iostream>
 #include <windows.h>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
 
-Camera cam;
+
+Camera cam(glm::vec3(0,0,10));
 
 void mouse_callback(GLFWwindow* m_Window, double xpos, double ypos)
 {
@@ -44,6 +48,13 @@ Application::Application(const int width, const int height, const char* title)
 	glDepthFunc(GL_LEQUAL);
 	glfwSetCursorPosCallback(m_Window, mouse_callback);
 	glfwSetFramebufferSizeCallback(m_Window, framebuffer_size_callback);
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
+	ImGui_ImplOpenGL3_Init("#version 330");
 
 	renderer.Init();
 }

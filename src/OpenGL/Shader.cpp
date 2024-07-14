@@ -1,4 +1,35 @@
 #include "Shader.h"
+#include <vector>
+
+
+void CheckCompileError(unsigned int shader, const char* shaderType)
+{
+	GLint isCompiled = 0;
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+
+	if (isCompiled == GL_FALSE)
+	{
+		int maxLength = 512;
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+		// The maxLength includes the NULL character
+		std::vector<char> errorLog(maxLength);
+		glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
+
+        std::cout << shaderType << " COMPILATION ERROR : " << std::endl;
+
+        for (char log : errorLog)
+        {
+            std::cout << log;
+        }
+
+        std::cout << std::endl;
+
+		// Exit with failure.
+		glDeleteShader(shader); // Don't leak the shader.
+	}
+}
+
 
 Shader::Shader(const char* fragPath, const char* vertPath)
 {
@@ -38,10 +69,14 @@ Shader::Shader(const char* fragPath, const char* vertPath)
     glShaderSource(vertexShader, 1, &vShaderCode, NULL);
     glCompileShader(vertexShader);
 
+    CheckCompileError(vertexShader, "Vertex Shader");
+
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fShaderCode, NULL);
     glCompileShader(fragmentShader);
+
+    CheckCompileError(fragmentShader, "Fragment Shader");
 
     shaderId = glCreateProgram();
     glAttachShader(shaderId, vertexShader);

@@ -160,11 +160,13 @@
     <ClCompile Include="Libraries\include\imgui\imgui_tables.cpp" />
     <ClCompile Include="Libraries\include\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\Game\Camera.cpp" />
+    <ClCompile Include="src\Game\Light.cpp" />
     <ClCompile Include="src\Game\Model.cpp" />
     <ClCompile Include="src\Game\Renderer.cpp" />
     <ClCompile Include="src\Game\Skybox.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\OpenGL\FrameBuffer.cpp" />
     <ClCompile Include="src\OpenGL\Shader.cpp" />
     <ClCompile Include="src\OpenGL\Texture.cpp" />
     <ClCompile Include="src\OpenGL\VertexBuffer.cpp" />
@@ -182,9 +184,11 @@
     <ClInclude Include="Libraries\include\imgui\imstb_textedit.h" />
     <ClInclude Include="Libraries\include\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Game\Camera.h" />
+    <ClInclude Include="src\Game\Light.h" />
     <ClInclude Include="src\Game\Model.h" />
     <ClInclude Include="src\Game\Renderer.h" />
     <ClInclude Include="src\Game\Skybox.h" />
+    <ClInclude Include="src\OpenGL\FrameBuffer.h" />
     <ClInclude Include="src\OpenGL\Shader.h" />
     <ClInclude Include="src\OpenGL\Texture.h" />
     <ClInclude Include="src\OpenGL\VertexBuffer.h" />

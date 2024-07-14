@@ -1,4 +1,5 @@
-#include "Model.h"
+﻿#include "Model.h"
+#include "GLFW/glfw3.h"
 
 std::vector<std::string> split(std::string line, std::string delimeter)
 {
@@ -64,7 +65,7 @@ void read_face(std::vector<std::string> words, std::vector<glm::vec3>& v, std::v
 }
 
 Model::Model(const char* path, Shader shader, Texture texture)
-	:m_Shader(shader), m_Texture(texture)
+	:m_Shader(shader), m_Texture(texture), m_CubemapTex("res/textures/skybox", GL_TEXTURE0, GL_TEXTURE_CUBE_MAP, true)
 {
 	size_t vertexCount = 0;
 	size_t normalCount = 0;
@@ -108,7 +109,7 @@ Model::Model(const char* path, Shader shader, Texture texture)
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	VertexBuffer* vb = new VertexBuffer(&vertices, sizeof(vertices));
+	VertexBuffer* vb = new VertexBuffer(&vertices[0], vertices.size() * sizeof(float));
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -116,6 +117,8 @@ Model::Model(const char* path, Shader shader, Texture texture)
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 	glEnableVertexAttribArray(2);
+
+	m_Shader.setVec3("lightPos", glm::vec3(0, 3, 5));
 }
 
 void Model::Draw(glm::mat4 proj, glm::mat4 view, glm::vec3 camPos, glm::vec3 pos, float rotation, glm::vec3 scale)
@@ -129,10 +132,17 @@ void Model::Draw(glm::mat4 proj, glm::mat4 view, glm::vec3 camPos, glm::vec3 pos
 	m_Shader.setMat4("proj", proj);
 	m_Shader.setMat4("view", view);
 	m_Shader.setMat4("model", model);
+	m_Shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 	m_Shader.setVec3("viewPos", camPos);
 	m_Shader.setI("ourTexture", 0);
+	m_Shader.setI("shadowMap", 7);
+	m_Shader.setVec3("lightPos", lightPos);
+	m_Shader.setF("time", (float)glfwGetTime());
+
+	m_CubemapTex.Bind();
+	m_Shader.setI("skybox", 1);
 
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 	glBindVertexArray(0); // Unbinding it
 }

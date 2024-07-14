@@ -9,6 +9,7 @@ public:
 	Skybox(const char* texPath, const char* fragPath, const char* vertPath);
 	
 	void Draw(glm::mat4 proj, glm::mat4 view);
+	Texture getCubemapTex();
 
 private:
 	unsigned int VAO;

@@ -22,7 +22,7 @@ Texture::Texture(const char* path, GLenum textureIndex, GLenum targetTexType, co
 			int width, height, nrChannels;
 			stbi_set_flip_vertically_on_load(false); // tell stb_image.h to flip loaded texture's on the y-axis.
 			std::string img_path = path + std::to_string(i);
-			img_path += ".jpg";
+			img_path += ".png";
 			unsigned char* data = stbi_load(img_path.c_str(), &width, &height, &nrChannels, 0);
 			if (data)
 			{
